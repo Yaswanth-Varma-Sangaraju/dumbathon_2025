@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DUMB-a-THON</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+        }
+        .loader-container {
+            text-align: center;
+        }
+        .circular-progress {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+        .circular-progress-circle {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        .progress-background {
+            fill: none;
+            stroke: #333;
+            stroke-width: 10;
+        }
+        .progress-bar {
+            fill: none;
+            stroke: #2196F3;
+            stroke-width: 10;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        #percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 26px;
+            font-weight: 600;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 400;
+            min-height: 27px;
+        }
+        #next {
+            margin-top: 20px;
+            display: none;
+            font-size: 16px;
+            padding: 12px 24px;
+            color: #fff;
+            background-color: #2196F3;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 8px 15px rgba(33, 150, 243, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        #next:hover {
+            background-color: #1976D2;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(33, 150, 243, 0.6);
+        }
+        #next:active {
+            transform: translateY(2px);
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3);
+        }
+        a{
+            text-decoration: none;
+            color: antiquewhite;
+        }
+    </style>
+</head>
+<body>
+    <div class="loader-container">
+        <div class="circular-progress">
+            <svg class="circular-progress-circle" width="150" height="150">
+                <circle class="progress-background" cx="75" cy="75" r="70"></circle>
+                <circle class="progress-bar" id="progress" cx="75" cy="75" r="70"></circle>
+            </svg>
+            <div id="percentage">0%</div>
+        </div>
+        <div id="message"></div>
+        <button id="next"><a href="rulepage/index.html">NEXT</a></button>
+    </div>
+
+    <script>
+        const progress = document.getElementById('progress');
+        const percentage = document.getElementById('percentage');
+        const message = document.getElementById('message');
+        const nextButton = document.getElementById('next');
+        let currentProgress = 0;
+
+        function setProgress(value) {
+            const circumference = 2 * Math.PI * 70;
+            const progressValue = (value > 100 ? value - 100 : value);
+            const offset = circumference - (progressValue / 100) * circumference;
+
+            if (value <= 100) {
+                progress.style.strokeDashoffset = offset;
+            } else {
+                progress.style.strokeDashoffset = offset;
+            }
+
+            percentage.textContent = `${value}%`;
+        }
+
+        function incrementProgress() {
+            if (currentProgress < 200) {
+                currentProgress += 1;
+                setProgress(currentProgress);
+
+                if (currentProgress === 100) {
+                    message.textContent = "Almost there... Wait, there's more!";
+                    setTimeout(() => {
+                        message.textContent = "Hang tight, we're surprising you!";
+                        setTimeout(incrementProgress, 50);
+                    }, 2000);
+                } else {
+                    setTimeout(incrementProgress, 50);
+                }
+            } else if (currentProgress === 200) {
+                message.textContent = "Loading complete!";
+                nextButton.style.display = "inline-block";
+            }
+        }
+
+        incrementProgress();
+    </script>
+</body>
+</html>
